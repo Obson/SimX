@@ -965,6 +965,8 @@ void SimXFrame::manageEquationsButton()
     // there is nothing left to define.
 
     // btnEquations->Enable(Expression::haveFreeVariables());
+
+    // Small change to test git processing.
 }
 
 void SimXFrame::OnChoice1Select(wxCommandEvent& event)
