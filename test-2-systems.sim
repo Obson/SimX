@@ -1,0 +1,57 @@
+model=G&L Chapter 3
+[sectors]
+G=government
+H=households
+P=producers
+G2=government 2
+H2=households 2
+P2=producers 2
+[transfers]
+c=consumption
+g=govt. expenditure
+t=taxation
+w=wages
+c2=consumption 2
+g2=govt. expenditure 2
+t2=taxation 2
+w2=wages 2
+[transfers/c]
+source=H
+dest=P
+[transfers/g]
+source=G
+dest=P
+[transfers/t]
+source=H
+dest=G
+[transfers/w]
+source=P
+dest=H
+[transfers/c2]
+source=H2
+dest=P2
+[transfers/g2]
+source=G2
+dest=P2
+[transfers/t2]
+source=H2
+dest=G2
+[transfers/w2]
+source=P2
+dest=H2
+[equations]
+t2=( (w2' * r1) + (c2' * r2) ) / 100
+d2=w2' - t2'
+g2=50
+w2=c2 + g2
+w=c + g
+r2=10
+r1=10
+g=50
+c2=(a1 * d2) + ( (a2 * H2') / 100)
+fs=(t * 100) / (g + 1)
+d=w' - t'
+c=(a1 * d) + ( (a2 * H') / 100)
+a2=40
+t=( (w' * r1) + (c' * r2) ) / 100
+a1=0.6

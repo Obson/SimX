@@ -1,0 +1,64 @@
+### WARNING DO NOT MODIFY THIS FILE! ###
+#
+# This file is generated automatically and may cause the program to malfunction
+# if modified incorrectly!
+#
+model = G&L Chapter 3 + Basic Income
+[sectors]
+H = households
+P = producers
+G = government
+
+[transfers]
+c = consumption
+g = govt. expenditure
+w = wages
+t = taxation
+b = basic income
+
+[transfers/c]
+source = H
+dest = P
+
+[transfers/g]
+source = G
+dest = P
+
+[transfers/w]
+source = P
+dest = H
+
+[transfers/t]
+source = H
+dest = G
+
+[transfers/b]
+source = G
+dest = H
+
+[equations]
+w = c + g
+t = ( ( (w * r1) + (c * r2) ) / 100)
+r1 = 10
+r2 = 0
+c = ( (a1 * d) + (a2 * H') ) / 100
+d = w' - t'
+a1 = 60
+a2 = 40
+g = 100
+b = 10
+
+[probes]
+fs = (t * 100) / (g + 1)
+#sp = 0 - T
+
+# Original SimX input data
+# c : H <- P
+# g : G <- P
+# w : P <- H
+# w = c + g
+# c = ( (w' - t') * s) / 100
+# g = 50
+# t : G <+ H
+# t = (w / 10) + (c' / 5)
+# s = 100

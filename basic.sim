@@ -1,0 +1,48 @@
+model=Basic Model
+[sectors]
+X=foreign
+G=government
+H=households
+P=producers
+[transfers]
+b=basic income
+c=consumption
+g=govt. expenditure
+m=imports
+t=taxation
+w=wages
+x=exports
+[transfers/b]
+source=G
+dest=H
+[transfers/c]
+source=H
+dest=P
+[transfers/g]
+source=G
+dest=P
+[transfers/m]
+source=H
+dest=X
+[transfers/t]
+source=H
+dest=G
+[transfers/w]
+source=P
+dest=H
+[transfers/x]
+source=X
+dest=P
+[equations]
+x=0
+w=c + g + x
+r2=0
+m=0
+g=100
+d=w' - t'
+c=( (a1 * d) + (a2 * H') ) / 100
+r1=10
+b=0
+a2=40
+t=( ( (w * r1) + (c * r2) ) / 100)
+a1=60

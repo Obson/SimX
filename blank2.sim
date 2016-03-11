@@ -1,0 +1,9 @@
+[sectors]
+G=government
+H=households
+P=producers
+[transfers]
+c=consumption
+g=govt. expenditure
+t=taxation
+w=wages

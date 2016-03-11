@@ -1,0 +1,34 @@
+[sectors]
+G=government
+H=households
+P=producers
+[transfers]
+c=consumption
+g=govt. expenditure
+t=taxation
+w=wages
+[transfers/c]
+source=H
+dest=P
+[transfers/g]
+source=G
+dest=P
+[transfers/t]
+source=H
+dest=G
+[transfers/w]
+source=P
+dest=H
+[equations]
+w=c + g
+r2=10
+r1=10
+g=Sector G
+fs=(t * 100) / (g + 1)
+d=w' - t'
+c=(a1 * d) + ( (a2 * H') / 100)
+a2=40
+T=( (w' * r1) + (c' * r2) ) / 100
+a1=0.6
+P=Sector P
+H=Sector H

@@ -1,0 +1,20 @@
+### WARNING DO NOT MODIFY THIS FILE! ###
+#
+# This file is generated automatically and may cause the program to malfunction
+# if modified incorrectly!
+#
+model = Test 2x
+
+[sectors]
+S1 = sector 1
+S2 = sector 2
+
+[transfers]
+tx = transfer
+
+[transfers/tx]
+source = S1
+dest = S2
+
+[equations]
+tx =  50 - T

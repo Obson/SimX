@@ -1,0 +1,70 @@
+model=Two Domains
+[sectors]
+G1=government 1
+H1=households 1
+P1=producers 1
+G2=government 2
+H2=households 2
+P2=producers 2
+[transfers]
+c1=consumption 1
+g1=govt. 1 expenditure
+t1=taxation 1
+w1=wages 1
+c2=consumption 2
+g2=govt. 2 expenditure
+t2=taxation 2
+w2=wages 2
+
+[transfers/c1]
+source=H1
+dest=P1
+
+[transfers/g1]
+source=G1
+dest=P1
+
+[transfers/t1]
+source=H1
+dest=G1
+
+[transfers/w1]
+source=P1
+dest=H1
+
+[transfers/c2]
+source=H2
+dest=P2
+
+[transfers/g2]
+source=G2
+dest=P2
+
+[transfers/t2]
+source=H2
+dest=G2
+
+[transfers/w2]
+source=P2
+dest=H2
+
+[equations]
+w1=c1 + g1
+c1=(alpha1 * d1) + (beta1 * H1')
+g1=50
+alpha1=0.1
+beta1=0.1
+t1=(rho1 * w1') + (gamma1 * c1')
+rho1=0.1
+gamma1=0.1
+d1=w1 - t1
+
+w2=c2 + g2
+c2=(alpha2 * d2) + (beta2 * H2')
+g2=50
+alpha2=0.1
+beta2=0.1
+t2=(rho2 * w2') + (gamma2 * c2')
+rho2=0.1
+gamma2=0.1
+d2=w2 - t2

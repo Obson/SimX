@@ -1,0 +1,49 @@
+model=G&L Chapter 3 + Basic Income (modified)
+[sectors]
+G=government
+H=households
+P=producers
+F=foreign
+[transfers]
+b=basic income
+c=consumption
+g=govt. expenditure
+t=taxation
+w=wages
+m=imports
+x=exports
+[transfers/b]
+source=G
+dest=H
+[transfers/c]
+source=H
+dest=P
+[transfers/g]
+source=G
+dest=P
+[transfers/t]
+source=H
+dest=G
+[transfers/w]
+source=P
+dest=H
+[transfers/m]
+source=H
+dest=F
+[transfers/x]
+source=F
+dest=P
+[equations]
+x=10
+m=10
+w=c + g + x
+r2=0
+g=100
+fs=(t * 100) / (g + 1)
+d=w' - t'
+c=( (a1 * d) + (a2 * H') ) / 100
+r1=10
+b=10
+a2=40
+t=( ( (w * r1) + (c * r2) ) / 100)
+a1=60
