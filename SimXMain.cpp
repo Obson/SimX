@@ -903,7 +903,7 @@ void SimXFrame::drawChart(bool cont)
     }
 
     for (auto it : params) {
-        /// @note Ths is a bit silly. We could just as easily have stored a
+        /// @todo Ths is a bit silly. We could just as easily have stored a
         /// pointer to the expression and then we wouldn't have to look it up
         /// each and every time.
         Expression *exp = Expression::find(it.str);
@@ -965,8 +965,6 @@ void SimXFrame::manageEquationsButton()
     // there is nothing left to define.
 
     // btnEquations->Enable(Expression::haveFreeVariables());
-
-    // Small change to test git processing.
 }
 
 void SimXFrame::OnChoice1Select(wxCommandEvent& event)

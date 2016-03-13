@@ -22,10 +22,10 @@ void crash(int line)
 }
 
 /// @class Expression
-/// Parses and resolves equations consisting of
-/// a dependent variable (LHS or lvalue) and an rvalue that can consist of a
-/// sequence of terms and operators; the name of a sector whose balance is
-/// required; or a special built-in quantity such as the periodic time.
+/// Parses and resolves equations consisting of a dependent variable (LHS or
+/// lvalue) and an rvalue that can consist of a sequence of terms and operators;
+/// the name of a sector whose balance is required; or a special built-in
+/// quantity such as the periodic time.
 
 /// @brief Defines an expression identifying a sectoral balance with a dependent
 /// variable (LHS or lvalue).
