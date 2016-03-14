@@ -26,6 +26,6 @@ There is currently no online help (none of the 'Help' buttons actually does
 anything) and there is no tutorial as yet. I have however written a document
 that describes its use  in investigating some of the propositions of Modern
 Money Theory, and plan to adapt this as an introductory tutorial. It's included
-here as rational-economics.pdf.
+here as [rational-economics.pdf] (https://github.com/Obson/SimX/blob/master/rational-economics.pdf).
 
 More info will follow later...
