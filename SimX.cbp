@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="SimX" />
+		<Option pch_mode="0" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/SimX" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-std=c++0x" />
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/SimX" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wshadow" />
+			<Add option="-Wredundant-decls" />
+			<Add option="-Wfloat-equal" />
+			<Add option="-Winline" />
+			<Add option="-Wunreachable-code" />
+			<Add option="-Wmissing-include-dirs" />
+			<Add option="-std=c++0x" />
+			<Add option="-Wall" />
+			<Add option="`wx-config --cflags`" />
+			<Add option="-Winvalid-pch" />
+			<Add option="-include wx_pch.h" />
+			<Add option="-DWX_PRECOMP" />
+		</Compiler>
+		<Linker>
+			<Add option="`wx-config --libs`" />
+		</Linker>
+		<Unit filename="EquationsDialog.cpp" />
+		<Unit filename="EquationsDialog.h" />
+		<Unit filename="ProbesDialog.cpp" />
+		<Unit filename="ProbesDialog.h" />
+		<Unit filename="RunDialog.cpp" />
+		<Unit filename="SectorsDialog.cpp" />
+		<Unit filename="SectorsDialog.h" />
+		<Unit filename="SimXApp.cpp" />
+		<Unit filename="SimXApp.h" />
+		<Unit filename="SimXMain.cpp" />
+		<Unit filename="SimXMain.h" />
+		<Unit filename="TransfersDialog.cpp" />
+		<Unit filename="TransfersDialog.h" />
+		<Unit filename="expression.cpp" />
+		<Unit filename="expression.h" />
+		<Unit filename="globals.cpp" />
+		<Unit filename="globals.h" />
+		<Unit filename="include/Interpreter.h">
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="mainpage.h" />
+		<Unit filename="mainpage.j" />
+		<Unit filename="sector.cpp" />
+		<Unit filename="sector.h" />
+		<Unit filename="transfer.cpp" />
+		<Unit filename="transfer.h" />
+		<Unit filename="version.h" />
+		<Unit filename="wx_pch.h">
+			<Option compile="1" />
+			<Option weight="0" />
+		</Unit>
+		<Unit filename="wxsmith/EquationsDialog.wxs" />
+		<Unit filename="wxsmith/ProbesDialog.wxs" />
+		<Unit filename="wxsmith/SectorsDialog.wxs" />
+		<Unit filename="wxsmith/SimXframe.wxs" />
+		<Unit filename="wxsmith/TransfersDialog.wxs" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<lib_finder disable_auto="1" />
+			<debugger />
+			<wxsmith version="1">
+				<gui name="wxWidgets" src="SimXApp.cpp" main="SimXFrame" init_handlers="necessary" language="CPP" />
+				<resources>
+					<wxFrame wxs="wxsmith/SimXframe.wxs" src="SimXMain.cpp" hdr="SimXMain.h" name="SimXFrame" language="CPP" />
+					<wxDialog wxs="wxsmith/SectorsDialog.wxs" src="SectorsDialog.cpp" hdr="SectorsDialog.h" name="SectorsDialog" language="CPP" />
+					<wxDialog wxs="wxsmith/TransfersDialog.wxs" src="TransfersDialog.cpp" hdr="TransfersDialog.h" name="TransfersDialog" language="CPP" />
+					<wxDialog wxs="wxsmith/EquationsDialog.wxs" src="EquationsDialog.cpp" hdr="EquationsDialog.h" name="EquationsDialog" language="CPP" />
+					<wxDialog wxs="wxsmith/ProbesDialog.wxs" src="ProbesDialog.cpp" hdr="ProbesDialog.h" name="ProbesDialog" language="CPP" />
+				</resources>
+			</wxsmith>
+			<AutoVersioning>
+				<Scheme minor_max="10" build_max="0" rev_max="0" rev_rand_max="10" build_times_to_increment_minor="100" />
+				<Settings autoincrement="1" date_declarations="1" do_auto_increment="0" ask_to_increment="0" language="C++" svn="0" svn_directory=" " header_path="version.h" />
+				<Changes_Log show_changes_editor="0" app_title="released version %M.%m.%b of %p" changeslog_path="ChangesLog.txt" />
+				<Code header_guard="VERSION_H" namespace="AutoVersion" prefix=" " />
+			</AutoVersioning>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
