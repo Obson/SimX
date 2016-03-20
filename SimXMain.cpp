@@ -789,7 +789,7 @@ void SimXFrame::showRunOptions(bool clear)
         Expression *exp = it.second;
         CheckListBox1->Append(s2ws(name) + _("\t") + s2ws(ProbesDialog::getDescription(name)));
 
-        /// @todo It doesn't make sense for probes to be parameters but as we
+        /// @todo (david#5#) It doesn't make sense for probes to be parameters but as we
         /// don't prevent this from happening we have to allow for the
         /// possibility
         if (exp->isParameter())
@@ -903,7 +903,7 @@ void SimXFrame::drawChart(bool cont)
     }
 
     for (auto it : params) {
-        /// @todo Ths is a bit silly. We could just as easily have stored a
+        /// @todo (david#5#) Ths is a bit silly. We could just as easily have stored a
         /// pointer to the expression and then we wouldn't have to look it up
         /// each and every time.
         Expression *exp = Expression::find(it.str);

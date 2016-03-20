@@ -1510,7 +1510,7 @@
 	"sector.h"
 	"transfer.h"
 
-1457891893 source:/home/david/Projects/cb-dev/SimX/SimXMain.cpp
+1458508831 source:/home/david/Projects/cb-dev/SimX/SimXMain.cpp
 	"wx_pch.h"
 	"SimXMain.h"
 	"SectorsDialog.h"
@@ -1565,13 +1565,13 @@
 	"wx/filefn.h"
 	"wx/strconv.h"
 
-1457891893 source:/home/david/Projects/cb-dev/SimX/expression.cpp
+1458508831 source:/home/david/Projects/cb-dev/SimX/expression.cpp
 	<iostream>
 	"expression.h"
 	"globals.h"
 	"sector.h"
 
-1457705872 /home/david/Projects/cb-dev/SimX/expression.h
+1458508831 /home/david/Projects/cb-dev/SimX/expression.h
 	<unordered_map>
 	<vector>
 	<stack>
@@ -1685,7 +1685,7 @@
 	<wx/string.h>
 	<wx/intl.h>
 
-1435937979 /home/david/Projects/cb-dev/SimX/EquationsDialog.h
+1458511227 /home/david/Projects/cb-dev/SimX/EquationsDialog.h
 	<wx/checklst.h>
 	<wx/dialog.h>
 	<wx/sizer.h>
@@ -1696,11 +1696,11 @@
 	<wx/choice.h>
 	"expression.h"
 
-1435777937 /home/david/Projects/cb-dev/SimX/globals.h
+1458471780 /home/david/Projects/cb-dev/SimX/globals.h
 	<string>
 	<wx/string.h>
 
-1435778311 source:/home/david/Projects/cb-dev/SimX/globals.cpp
+1458471767 source:/home/david/Projects/cb-dev/SimX/globals.cpp
 	"globals.h"
 
 1435961877 source:/home/david/Projects/cb-dev/SimX/ProbesDialog.cpp

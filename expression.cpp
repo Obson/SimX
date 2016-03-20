@@ -123,7 +123,7 @@ Expression::Expression(string &lhs, SpecialType t)
     this->lhs = lhs;        // useful for diagnostics
     error = Error::none;
 
-    orig = "[Time]";        /// @todo add other variations later
+    orig = "[Time]";        /// @todo (david#5#) add other variations later
     defined = -1;
     prev = -1;
     res = -1;
@@ -263,6 +263,11 @@ void Expression::revertAll()
     }
 }
 
+bool Expression::remove(string s)
+{
+    return bool(definitions.erase(s));
+}
+
 
 /// @brief  error_string returns a message describing the last error encountered.
 ///
@@ -354,7 +359,7 @@ double Expression::previousValue(int serial)
 ///
 /// @see evaluate()
 ///
-/// @todo Improve error reporting; at present failure to evaluate a sub-expression
+/// @todo (david#5#) Improve error reporting; at present failure to evaluate a sub-expression
 /// is only recorded as a failure in the calling expression. Needs investigating.
 
 bool Expression::evaluate_token(int tok, double &val, int serial)
@@ -435,7 +440,7 @@ void Expression::setValue(double d)
 ///
 /// @return bool: *true* if a result was obtained or is available, otherwise *false*
 ///
-/// @todo Tidy up distinction between undefined and incomplete expressions
+/// @todo (david#5#) Tidy up distinction between undefined and incomplete expressions
 ///
 /// @see evaluate(string), value(), evaluate_token(int, int&), error
 ///
@@ -452,7 +457,7 @@ bool Expression::evaluate(int serial)
 {
     cout << "Expression[" << lhs << "]::evaluate(" << serial << ")" << ", defined = " << defined << endl;
 
-    /// @note If defined > serial we are reverting to an earlier state. Generally
+    /// @note (david#9#) If defined > serial we are reverting to an earlier state. Generally
     /// this would be a restart, in which case we should set prev and res back
     /// to their starting value -- essentially a partial re-initialisation. I
     /// think this should do it, but it should be kept under review. Also, we
@@ -476,7 +481,7 @@ bool Expression::evaluate(int serial)
         defined = serial;
         return true;
     } else if (is_special) {
-        /// @todo Add special fumction R returning a random number
+        /// @todo (david#5#) Add special fumction R returning a random number
         // At present there's only one kind of special function -- the time
         // function, which just returns the value of serial.
         defined = serial;
@@ -508,7 +513,7 @@ bool Expression::evaluate(int serial)
             res = temp;
             return true;
         } else {
-            /// @todo Should set error here...
+            /// @todo (david#5#) Should set error here...
             error_info = names[dict[rpn[0]].id];
             return false;
         }
@@ -591,7 +596,7 @@ bool Expression::evaluate(int serial)
             n = makeToken(res0);
             st.push(n);
 
-            /// @note It's pretty inefficient to make a new token for every
+            /// @note (david#5#) It's pretty inefficient to make a new token for every
             /// number but avoiding duplicates would be an unnecessary
             /// complication at this stage. Consider modifying makeToken(int)
             /// to avoid duplicates later.
@@ -847,7 +852,7 @@ int Expression::term(string s, Category cat)
     case number:
         // Convert to number
         id.d = atof(s.c_str());   // (only positive integers handled at present)
-        /// @todo Allow unary operator '-'. Currently we have to write '-1' as
+        /// @todo (david#5#) Allow unary operator '-'. Currently we have to write '-1' as
         /// (0 - 1)
         break;
 
@@ -927,6 +932,20 @@ int Expression::tokenise(string s)
         // Uncomment if needed for debugging:
         // cout << i << ": c = " << c << " tok = " << tok.str() << " state " << state << endl;
 
+        if (isparen(c)) {
+            if (tok.str().length() > 0) {
+                Category cat = (state == ident ? var : (state == num ? number : opr));
+                tokens.push_back(Expression::term(tok.str(),cat));
+                tok.str("");    // empty tok
+            }
+            tok << c;
+            tokens.push_back(Expression::term(tok.str(),opr));
+            tok.str("");    // empty tok
+            state = sp;
+            //cout << "... state = " << state << endl;
+            continue;
+        }
+
         switch(state) {
 
         case sp:
@@ -999,6 +1018,13 @@ int Expression::tokenise(string s)
             break;
         }
     }
+
+    cout << "tokenise returns ";
+    for (auto t : tokens) {
+        cout << t << " ";
+    }
+    cout << endl;
+
     return tokens.size();
 }
 

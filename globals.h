@@ -28,7 +28,8 @@ double ws2d(wxString ws);
 wxString d2ws(double d);
 
 // -----------------------------------------------------------------------------
-
+// Other useful functions not included in STL
+bool isparen(char c);
 
 
 #endif // GLOBALS_H

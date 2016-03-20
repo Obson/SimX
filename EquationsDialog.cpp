@@ -67,12 +67,12 @@ EquationsDialog::EquationsDialog(wxWindow* parent,wxWindowID id,const wxPoint& p
 	CheckListBox1 = new wxCheckListBox(Panel4, ID_CHECKLISTBOX1, wxDefaultPosition, wxSize(288,240), 0, 0, 0, wxDefaultValidator, _T("ID_CHECKLISTBOX1"));
 	FlexGridSizer1->Add(Panel4, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	BoxSizer2 = new wxBoxSizer(wxVERTICAL);
-	btnEditEquation = new wxButton(Panel1, ID_BUTTON2, _("Edit"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
-	btnEditEquation->Disable();
-	BoxSizer2->Add(btnEditEquation, 0, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	btnRemoveEquation = new wxButton(Panel1, ID_BUTTON4, _("Remove"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON4"));
-	btnRemoveEquation->Disable();
-	BoxSizer2->Add(btnRemoveEquation, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	//btnEditEquation = new wxButton(Panel1, ID_BUTTON2, _("Edit"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
+	//btnEditEquation->Disable();
+	//BoxSizer2->Add(btnEditEquation, 0, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	//btnRemoveEquation = new wxButton(Panel1, ID_BUTTON4, _("Remove"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON4"));
+	//btnRemoveEquation->Disable();
+	//BoxSizer2->Add(btnRemoveEquation, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(BoxSizer2, 1, wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	Panel1->SetSizer(FlexGridSizer1);
 	FlexGridSizer1->Fit(Panel1);
@@ -97,7 +97,7 @@ EquationsDialog::EquationsDialog(wxWindow* parent,wxWindowID id,const wxPoint& p
 	Connect(ID_CHOICE1,wxEVT_COMMAND_CHOICE_SELECTED,(wxObjectEventFunction)&EquationsDialog::OnChoice1Select);
 	Connect(ID_TEXTCTRL1,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&EquationsDialog::OnTextCtrl1Text);
 	Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EquationsDialog::OnbtnAddEquationClick);
-	Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EquationsDialog::OnbtnEditEquationClick);
+	//Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EquationsDialog::OnbtnEditEquationClick);
 	//*)
 
 	populate();
@@ -109,6 +109,9 @@ EquationsDialog::~EquationsDialog()
 	//*)
 }
 
+/// @todo (david#1#) When an equation is edited it *appears* to be applied twice when its
+/// graph is displayed. This suggests the original version of the equation hasn't
+/// been cleared.
 void EquationsDialog::populate()
 {
     Choice1->Clear();
@@ -135,7 +138,7 @@ void EquationsDialog::populate()
     }
 
     btnAddEquation->Enable(!TextCtrl1->GetValue().IsEmpty() && Choice1->GetSelection() != wxNOT_FOUND);
-    btnEditEquation->Enable(!CheckListBox1->IsEmpty());
+    //btnEditEquation->Enable(!CheckListBox1->IsEmpty());
 }
 
 Expression *EquationsDialog::createEquation(wxString &wsVar, wxString &wsExp)
@@ -164,7 +167,7 @@ void EquationsDialog::OnbtnAddEquationClick(wxCommandEvent& event)
     // as its value. This should automatically add all the required names to
     // the dictionary (via makeToken) so we can then re-populate Choice1.
 
-    /// @todo Build a mechanism for extracting equations from the definitions
+    /// @todo (david#5#) Build a mechanism for extracting equations from the definitions
     /// vector and use it to repopulate the equations list (CheckListBox1).
     /// Expression::getRHS() will help.
 
@@ -191,6 +194,7 @@ void EquationsDialog::OnTextCtrl1Text(wxCommandEvent& event)
     btnAddEquation->Enable(!TextCtrl1->GetValue().IsEmpty() && Choice1->GetSelection() != wxNOT_FOUND);
 }
 
+/*
 void EquationsDialog::OnbtnEditEquationClick(wxCommandEvent& event)
 {
     int sel = CheckListBox1->GetSelection();
@@ -208,3 +212,4 @@ void EquationsDialog::OnbtnEditEquationClick(wxCommandEvent& event)
     Choice1->SetSelection(0);
     TextCtrl1->SetValue(rhs);
 }
+*/

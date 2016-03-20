@@ -33,9 +33,9 @@ class EquationsDialog: public wxDialog
         static Expression *createEquation(wxString &wsVar, wxString &wsExp);
 
 		//(*Declarations(EquationsDialog)
-		wxButton* btnRemoveEquation;
+		//wxButton* btnRemoveEquation;
 		wxPanel* Panel1;
-		wxButton* btnEditEquation;
+		//wxButton* btnEditEquation;
 		wxButton* btnAddEquation;
 		wxStaticText* StaticText1;
 		wxPanel* Panel2;

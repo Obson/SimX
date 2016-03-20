@@ -44,3 +44,9 @@ wxString d2ws(double d)
     ws << d;
 	return ws;
 }
+
+// Check if character is parenthesis
+bool isparen(char c)
+{
+    return (c == '(' || c == ')');
+}

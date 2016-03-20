@@ -13,7 +13,7 @@ using namespace std;
 
 class SimXFrame;
 class Sector;
-/// @todo Add other special built-in functions and (possibly) constraints.
+/// @todo (david#5#) Add other special built-in functions and (possibly) constraints.
 class Expression
 {
     public:
@@ -36,6 +36,7 @@ class Expression
         static Expression *find(string);
         static void clearAll();
         static void revertAll();
+        static bool remove(string);
 
         void setValue(double);  ///< for parametric values only (otherwise ignored)
 
@@ -137,7 +138,8 @@ class Expression
             sp      = 0,
             ident   = 1,
             num     = 2,
-            op      = 3
+            op      = 3,
+            paren   = 4
         };
 
         enum Optype {

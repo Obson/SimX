@@ -65,11 +65,7 @@
 		<Unit filename="expression.h" />
 		<Unit filename="globals.cpp" />
 		<Unit filename="globals.h" />
-		<Unit filename="include/Interpreter.h">
-			<Option target="Release" />
-		</Unit>
 		<Unit filename="mainpage.h" />
-		<Unit filename="mainpage.j" />
 		<Unit filename="sector.cpp" />
 		<Unit filename="sector.h" />
 		<Unit filename="transfer.cpp" />
