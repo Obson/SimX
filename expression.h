@@ -13,7 +13,8 @@ using namespace std;
 
 class SimXFrame;
 class Sector;
-/// @todo (david#5#) Add other special built-in functions and (possibly) constraints.
+
+/// @todo (david#5#) Add other special built-in functions and (possibly) constraints.
 class Expression
 {
     public:
@@ -34,6 +35,7 @@ class Expression
         virtual ~Expression();
 
         static Expression *find(string);
+        static void replace(string, Expression*);
         static void clearAll();
         static void revertAll();
         static bool remove(string);
@@ -118,13 +120,17 @@ class Expression
         string orig;            // original unparsed expression (RHS onnly)
         string lhs;             // logically redundant, but useful for diagnostics
 
+        void _in(string fn);
+        void _out();
+        void diags(string);
+
         /// @warning I tried using sector = nullptr to flag the (usual) case where
         /// the expression doesn't represent a sector balance, but the value was
         /// (sometimes?) returned as 0xff00000000, which would give the value
         /// false when compared against nullptr. There may be a correct procedure
         /// that wouldn't give rise to this apparent anomaly, but life's too
         /// short to waste any more time on it. Instead the bool is_sector_bal
-        /// will be used to idicate umbiguously and (I hope) reliably, whether
+        /// will be used to indicate unambiguously and (I hope) reliably, whether
         /// the expression represents a sector balance or not. When is_sector_bal
         /// is false, the value of sector is undefined and immaterial.
 
@@ -167,6 +173,8 @@ class Expression
         static vector<string> names;
         static vector<string> freeVars;
         static OpDesc *operators;
+
+        static int level;
 };
 
 #endif // EXPRESSION_H

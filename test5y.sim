@@ -1,0 +1,46 @@
+model=G&L Chapter 3 Plus foreign trade
+[sectors]
+G=government
+H=households
+P=producers
+F=foreign
+[transfers]
+c=consumption
+g=govt. expenditure
+t=taxation
+w=wages
+x=exports
+m=imports (domestic)
+[transfers/c]
+source=H
+dest=P
+[transfers/g]
+source=G
+dest=P
+[transfers/t]
+source=H
+dest=G
+[transfers/w]
+source=P
+dest=H
+[transfers/x]
+source=F
+dest=P
+[transfers/m]
+source=H
+dest=F
+[equations]
+m=(a3 * H') / 100
+w=c + g
+r2=10
+r1=10
+a4=100
+g=50
+fs=(t * 100) / (g + 1)
+d=w' - t'
+c=(a1 * d) + ((a2*H') / 100)
+a2=40
+x=(a4 * m) / 100
+t=((w' * r1) + (c' * r2)) / 100
+a1=0.6
+a3=10

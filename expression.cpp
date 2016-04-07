@@ -14,6 +14,7 @@ unordered_map<string, Expression*> Expression::probes;
 unordered_map<string, Expression*> Expression::specials;
 Expression::OpDesc *Expression::operators = 0;
 bool Expression::initialised = false;
+int Expression::level = 0;
 
 void crash(int line)
 {
@@ -51,13 +52,36 @@ Expression::Expression(string &lhs, Sector *sect, double init)
     return;
 }
 
+void Expression::_in(string fn)
+{
+    diags(string("->") + fn);
+    ++level;
+}
+
+void Expression::_out()
+{
+    --level;
+}
+
+void Expression::diags(string s)
+{
+    for (int i = 0; i < level; i++) {
+        cout << "  ";
+    }
+    cout << s << endl;
+}
+
 /// @brief Defines an expression consisting of a dependent variable (LHS or
 /// lvalue) and a predicate (RHS or rvalue) containing a number of terms connected
-/// by infix operators.
+/// by infix operators. If an expression having the given name on the lhs already
+/// exists, its rhs will be replace by the new predicate rather than creating an
+/// entirely new expression.
 
 Expression::Expression(string &lhs, string &expr, ExpressionType t, double init)
 {
-    cout << "Expression::Expression(" << lhs << "," << expr << ")" << endl;
+    _in("Expression::Expression(");
+    diags(lhs + "," + expr + ")");
+
     this->lhs = lhs;        // useful for diagnostics
 
     error = Error::none;
@@ -101,15 +125,29 @@ Expression::Expression(string &lhs, string &expr, ExpressionType t, double init)
     error = Error::none;
     reversePolish();
     if (error != Error::none) {
+        _out();
         return;
     }
 
     // Record as definition or probe
     if (t == exp_normal) {
+        //Expression *old_exp = definitions[lhs];
         definitions[lhs] = this;
+
+        stringstream str;
+        for (auto it : definitions) {
+            str << it.first << " ";
+        }
+        diags(str.str());
+
+
+        //delete old_exp;
     } else {
+        //delete probes[lhs]; // remove any existing entry
         probes[lhs] = this;
     }
+
+    _out();
 }
 
 /// @brief Defines an expression connecting a dependent variable with a special
@@ -119,7 +157,12 @@ Expression::Expression(string &lhs, string &expr, ExpressionType t, double init)
 
 Expression::Expression(string &lhs, SpecialType t)
 {
-    cout << "Expression::Expression(" << lhs << "," << t << ")" << endl;
+    _in("Expression::Expression");
+    string s;
+    stringstream str(s);
+    str << lhs << "," << t << ")";
+    diags(s);
+
     this->lhs = lhs;        // useful for diagnostics
     error = Error::none;
 
@@ -133,6 +176,8 @@ Expression::Expression(string &lhs, SpecialType t)
     is_sector_bal = false;
 
     specials[lhs] = this;
+
+    _out();
 }
 
 Expression::~Expression()
@@ -151,14 +196,20 @@ double Expression::getDefault()
 
 void Expression::revert(double init)
 {
+    _in("Expression::revert");
+
     defined = -1;
     if (!is_parametric) {
         prev = -1;
         res = init;
     }
 
-    cout << "Expression::revert(" << init << "): prev = " << prev
-        << ", res = " << res << ", defined = " << defined << endl;
+    stringstream str;
+    str << "init = " << init << ": lhs = " << lhs << " prev = " << prev
+        << ", res = " << res << ", defined = " << defined;
+    diags(str.str());
+
+    _out();
 }
 
 void Expression::initialise()
@@ -231,6 +282,12 @@ Expression *Expression::find(string s)
     }
 
     return exp;
+}
+
+void Expression::replace(string s, Expression *exp)
+{
+    delete definitions[s];
+    definitions[s] = exp;
 }
 
 void Expression::clearAll()
@@ -332,6 +389,12 @@ double Expression::previousValue(int serial)
     // be a current value either. In this case we chould really evaluate it,
     // but for now we'll just assume everything starts at zero. This should be
     // fixed later.
+    _in("Expression::previousValue(int serial)");
+
+    stringstream str;
+    str << "defined = " << defined << ", serial = " << serial << ", prev = " << prev;
+    diags(str.str());
+
     if (defined == serial) {
         return defined > 0 ? prev : 0;
     } else if (serial < defined) {
@@ -342,6 +405,8 @@ double Expression::previousValue(int serial)
     } else {
         return (is_sector_bal ? sector->getBalance() : res);
     }
+
+    _out();
 }
 
 /// @brief Evaluates the operand represented by the token
@@ -364,6 +429,8 @@ double Expression::previousValue(int serial)
 
 bool Expression::evaluate_token(int tok, double &val, int serial)
 {
+    _in("evaluate_token");
+
     Attribs a;
     Expression *expr;
     bool ok = false;
@@ -395,7 +462,7 @@ bool Expression::evaluate_token(int tok, double &val, int serial)
         {
             if (a.value.i < 0)
             {
-                cout << "Expression::evaluate_token(): getting previous value" << endl;
+                diags("getting previous value");
 
                 // Refers to previous value of the expression. No evaluation needed
                 // as previous value is always available. However, we do not set
@@ -403,6 +470,7 @@ bool Expression::evaluate_token(int tok, double &val, int serial)
                 // been evaluated or defined.
 
                 val = expr->previousValue(serial);  // evaluates if necessary
+                _out();
                 return true;
             }
             else if (expr->evaluate(serial))
@@ -423,6 +491,9 @@ bool Expression::evaluate_token(int tok, double &val, int serial)
         val = a.value.d;
         ok = true;
     }
+
+    _out();
+
     return ok;
 }
 
@@ -455,7 +526,11 @@ void Expression::setValue(double d)
 
 bool Expression::evaluate(int serial)
 {
-    cout << "Expression[" << lhs << "]::evaluate(" << serial << ")" << ", defined = " << defined << endl;
+    _in("Expression::evaluate");
+
+    stringstream str;
+    str << "lhs = " << lhs << ", serial = " << serial << ", defined = " << defined;
+    diags(str.str());
 
     /// @note (david#9#) If defined > serial we are reverting to an earlier state. Generally
     /// this would be a restart, in which case we should set prev and res back
@@ -467,18 +542,27 @@ bool Expression::evaluate(int serial)
     if (defined > serial) {
         revert();
     } else if (defined == serial) {
+        _out();
         return true;
     } else /* defined < serial */ {
-        cout << "Expression[" << lhs << "]::evaluate(" << serial << "): " << "prev = " << prev << ", res = " << res << endl;
+        stringstream str;
+        str << "serial = " << serial << ": " << "prev = " << prev << ", res = " << res;
+        diags(str.str());
         prev = res;
-        cout << "Expression[" << lhs << "]::evaluate(" << serial << "): " << "prev updated to " << prev << endl;
     }
 
     defined = serial;
 
+    if (lhs == "c") {
+        stringstream str;
+        str << "defined = " << defined;
+        diags(str.str());
+    }
+
     if (is_sector_bal) {
         res = sector->getBalance();
         defined = serial;
+        _out();
         return true;
     } else if (is_special) {
         /// @todo (david#5#) Add special fumction R returning a random number
@@ -487,10 +571,12 @@ bool Expression::evaluate(int serial)
         defined = serial;
         res = serial;
         prev = serial - 1;
+        _out();
         return true;
     } else if (is_parametric) {
         // Value (res) will have been set from SimXFrame so no need to evaluate
         // anything
+        _out();
         return true;
     }
 
@@ -511,6 +597,7 @@ bool Expression::evaluate(int serial)
         double temp;
         if (evaluate_token(rpn[0], temp, serial)) {
             res = temp;
+            _out();
             return true;
         } else {
             /// @todo (david#5#) Should set error here...
@@ -533,8 +620,7 @@ bool Expression::evaluate(int serial)
         }
         else if (a.category == opr)
         {
-            cout << "Expression[" << lhs << "]::evaluate(" << serial << "): "
-                << "Operator found" << endl;
+            diags("Operator found" );
 
             // Operators require two operands
             if (st.size() < 2) {
@@ -565,8 +651,10 @@ bool Expression::evaluate(int serial)
             }
 
             // Combine the operands...
-            cout << "Expression[" << lhs << "]::evaluate(" << serial << "): "
-                << "Operands: " << res1 << ", " << res2 << endl;
+            stringstream str;
+            str << "lhs = " << lhs << ", serial = " << serial << ": "
+                << "Operands: " << res1 << ", " << res2;
+            diags(str.str());
 
             if (a.value.i == plus) {
                 res0 = res1 + res2;
@@ -603,9 +691,15 @@ bool Expression::evaluate(int serial)
         }
     }
 
+    if (lhs == "c") {
+        stringstream str;
+        str << "* OUT * defined = " << defined << " ***";
+        diags(str.str());
+    }
+
     res = res0;
 
-    cout << "Expression[" << lhs << "]::evaluate(" << serial << "): " << "var " << lhs << " = " << res << endl;
+    _out();
 
     return true;
 }
@@ -663,6 +757,8 @@ int Expression::makeToken(string s)
 
 void Expression::reversePolish()
 {
+    _in("Expression::reversePolish()");
+
     stack<int> st;
     int tok1, tok2;
     Attribs a1, a2;
@@ -740,6 +836,7 @@ void Expression::reversePolish()
             if (st.size() < 2) {
                 cout << "Expression::reversePolish(): Too few operands" << endl;
                 error = Error::too_few_operands;
+                _out();
                 return;
             }
         }
@@ -752,6 +849,7 @@ void Expression::reversePolish()
         {
             cout << "Expression::reversePolish(): Unmatched lparen" << endl;
             error = unmatched_lparen;
+            _out();
             return;
         }
         else
@@ -760,6 +858,8 @@ void Expression::reversePolish()
             st.pop();
         }
     }
+
+    _out();
 }
 
 unordered_map<string, Expression*> &Expression::getDefinitions()
@@ -821,6 +921,10 @@ string &Expression::getName(int id)
 int Expression::term(string s, Category cat)
 {
     //assert(sector == nullptr);
+    _in("Expression::term(string s, Category cat)");
+    stringstream str;
+    str << "s = " << s << ", " << cat;
+    diags(str.str());
 
     union {
         int i;
@@ -837,6 +941,9 @@ int Expression::term(string s, Category cat)
         // See if s is listed as an operator
         for (unsigned int i = 0; i < Optype::__count; i++) {
             if (operators[i].name == s) {
+                stringstream str;
+                str << "operator " << s << " has id " << i;
+                diags(str.str());
                 id.i = i;
                 break;
             }
@@ -844,14 +951,22 @@ int Expression::term(string s, Category cat)
         if (id.i < 0) {
             error = invalid_operator;
             error_info = s;
-            //cout << "Unrecognised operator " << s << endl;
+            stringstream str;
+            str << "Unrecognised operator " << s;
+            diags(str.str());
+            _out();
             return -1;
         }
         break;
 
     case number:
         // Convert to number
-        id.d = atof(s.c_str());   // (only positive integers handled at present)
+        {
+            id.d = atof(s.c_str());   // (only positive integers handled at present)
+            stringstream str;
+            str << "number " << s << " has id " << id.d;
+            diags(str.str());
+        }
         /// @todo (david#5#) Allow unary operator '-'. Currently we have to write '-1' as
         /// (0 - 1)
         break;
@@ -867,12 +982,18 @@ int Expression::term(string s, Category cat)
         for (unsigned int i = 0; i < names.size(); i++) {
             if (names[i] == s) {
                 id.i = i;
+                stringstream str;
+                str << "existing variable " << s << " has id " << id.i;
+                diags(str.str());
             }
         }
         // If not, add it
         if (id.i == -1) {
             names.push_back(s);
             id.i = names.size() - 1;  // (first element is names[0])
+            stringstream str;
+            str << "new variable " << s << " has id " << id.i;
+            diags(str.str());
         }
         break;
     }
@@ -884,11 +1005,18 @@ int Expression::term(string s, Category cat)
         for (auto it : dict) {
             // Found, return index
             if (it.second.category == var && it.second.id == id.i && it.second.value.i == dashed) {
+                diags("token for variable found in dictionary");
+                _out();
                 return it.first;
             }
         }
     }
     // Not found, add to dictionary
+    {
+        stringstream str;
+        str << "token not found in dictionary -- adding";
+        diags(str.str());
+    }
     Attribs a;
     if (cat == var) {
         a.id = id.i;      // id indexes array of names
@@ -909,16 +1037,24 @@ int Expression::term(string s, Category cat)
     a.category = cat;
     int n = dict.size();
     dict[n] = a;
+    {
+        stringstream str;
+        str << "token added at " << n;
+        diags(str.str());
+    }
+    _out();
     return n;
 }
 
 /// @todo (david#3#): Improve parsing mechanism e.g. don't treat arbirary
 /// combinations of characters as operators, allow expression to start with
 /// minus sign). Consider adding unary operators and functions.
-
 int Expression::tokenise(string s)
 {
     // assert(sector == nullptr);
+
+    _in("Expression::tokenise(string s)");
+    stringstream str;
 
     State state = sp;   // notional whitespace at start
     stringstream tok;
@@ -1019,11 +1155,13 @@ int Expression::tokenise(string s)
         }
     }
 
-    cout << "tokenise returns ";
+    str << "tokenise returns ";
     for (auto t : tokens) {
-        cout << t << " ";
+        str << t << " ";
     }
-    cout << endl;
+    diags(str.str());
+
+    _out();
 
     return tokens.size();
 }

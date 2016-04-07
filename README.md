@@ -1,6 +1,6 @@
 # SimX
 SimX is a simple economic modelling system written in C++ using Code::Blocks
-with the wxSmith framework.
+and wxWidgets.
 
 It has has been developed in Linux and hasn't so far been compiled for any other
 OS. The current version is pre-alpha and is not guaranteed to work, even

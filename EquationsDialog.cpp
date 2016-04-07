@@ -49,7 +49,7 @@ EquationsDialog::EquationsDialog(wxWindow* parent,wxWindowID id,const wxPoint& p
 	FlexGridSizer1->AddGrowableCol(0);
 	Panel3 = new wxPanel(Panel1, ID_PANEL3, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL3"));
 	BoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
-	Choice1 = new wxChoice(Panel3, ID_CHOICE1, wxDefaultPosition, wxSize(50,-1), 0, 0, wxCB_SORT, wxDefaultValidator, _T("ID_CHOICE1"));
+	Choice1 = new wxChoice(Panel3, ID_CHOICE1, wxDefaultPosition, wxSize(50,-1), 0, 0, 0, wxDefaultValidator, _T("ID_CHOICE1"));
 	Choice1->SetFocus();
 	BoxSizer3->Add(Choice1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText1 = new wxStaticText(Panel3, ID_STATICTEXT1, _("="), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
@@ -67,12 +67,12 @@ EquationsDialog::EquationsDialog(wxWindow* parent,wxWindowID id,const wxPoint& p
 	CheckListBox1 = new wxCheckListBox(Panel4, ID_CHECKLISTBOX1, wxDefaultPosition, wxSize(288,240), 0, 0, 0, wxDefaultValidator, _T("ID_CHECKLISTBOX1"));
 	FlexGridSizer1->Add(Panel4, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	BoxSizer2 = new wxBoxSizer(wxVERTICAL);
-	//btnEditEquation = new wxButton(Panel1, ID_BUTTON2, _("Edit"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
-	//btnEditEquation->Disable();
-	//BoxSizer2->Add(btnEditEquation, 0, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	//btnRemoveEquation = new wxButton(Panel1, ID_BUTTON4, _("Remove"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON4"));
-	//btnRemoveEquation->Disable();
-	//BoxSizer2->Add(btnRemoveEquation, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	btnEditEquation = new wxButton(Panel1, ID_BUTTON2, _("Edit"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
+	btnEditEquation->Disable();
+	BoxSizer2->Add(btnEditEquation, 0, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	btnRemoveEquation = new wxButton(Panel1, ID_BUTTON4, _("Remove"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON4"));
+	btnRemoveEquation->Disable();
+	BoxSizer2->Add(btnRemoveEquation, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(BoxSizer2, 1, wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	Panel1->SetSizer(FlexGridSizer1);
 	FlexGridSizer1->Fit(Panel1);
@@ -97,7 +97,7 @@ EquationsDialog::EquationsDialog(wxWindow* parent,wxWindowID id,const wxPoint& p
 	Connect(ID_CHOICE1,wxEVT_COMMAND_CHOICE_SELECTED,(wxObjectEventFunction)&EquationsDialog::OnChoice1Select);
 	Connect(ID_TEXTCTRL1,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&EquationsDialog::OnTextCtrl1Text);
 	Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EquationsDialog::OnbtnAddEquationClick);
-	//Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EquationsDialog::OnbtnEditEquationClick);
+	Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EquationsDialog::OnbtnEditEquationClick);
 	//*)
 
 	populate();
@@ -138,7 +138,7 @@ void EquationsDialog::populate()
     }
 
     btnAddEquation->Enable(!TextCtrl1->GetValue().IsEmpty() && Choice1->GetSelection() != wxNOT_FOUND);
-    //btnEditEquation->Enable(!CheckListBox1->IsEmpty());
+    btnEditEquation->Enable(!CheckListBox1->IsEmpty());
 }
 
 Expression *EquationsDialog::createEquation(wxString &wsVar, wxString &wsExp)
@@ -194,7 +194,6 @@ void EquationsDialog::OnTextCtrl1Text(wxCommandEvent& event)
     btnAddEquation->Enable(!TextCtrl1->GetValue().IsEmpty() && Choice1->GetSelection() != wxNOT_FOUND);
 }
 
-/*
 void EquationsDialog::OnbtnEditEquationClick(wxCommandEvent& event)
 {
     int sel = CheckListBox1->GetSelection();
@@ -207,9 +206,13 @@ void EquationsDialog::OnbtnEditEquationClick(wxCommandEvent& event)
     int pos = str.rfind(_(" = "));
     wxString var = str.Mid(0, pos);
     wxString rhs = str.Mid(pos + 3);
+
+    // Find the definition for this equation
+    Expression::find(ws2s(var));
+
+
     Choice1->Clear();
     Choice1->Append(var);
     Choice1->SetSelection(0);
     TextCtrl1->SetValue(rhs);
 }
-*/

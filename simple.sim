@@ -1,0 +1,22 @@
+model=Untitled (modified)
+[sectors]
+A=Alice
+B=Bert
+C=Charlie
+[transfers]
+d=donation
+e=extra
+g=gift
+[transfers/d]
+source=A
+dest=B
+[transfers/e]
+source=B
+dest=C
+[transfers/g]
+source=C
+dest=A
+[equations]
+d=e + g
+e=20
+g=10
