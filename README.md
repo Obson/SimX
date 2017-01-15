@@ -23,9 +23,9 @@ with different parameter values, and the effect of the changes on the model's
 behaviour monitored.
 
 There is currently no online help (none of the 'Help' buttons actually does
-anything) and there is no tutorial as yet. I have however written a document
-that describes its use  in investigating some of the propositions of Modern
-Money Theory, and plan to adapt this as an introductory tutorial. It's included
-here as [rational-economics.pdf] (https://github.com/Obson/SimX/blob/master/rational-economics.pdf).
+anything) and there is no tutorial as yet. I am however writing a document
+Chapter 1 of which describes its use  in investigating some of the propositions
+of Modern Money Theory. It's included
+here as [Comprehensible Macro-Economics] (https://github.com/Obson/SimX/blob/master/comprehensible-macro-economics-2017-1.pdf) 
 
 See [the wiki] (https://github.com/Obson/SimX/wiki) for more information...
